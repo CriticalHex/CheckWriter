@@ -1,38 +1,12 @@
 import math
 
-its = {
-    1:"one", 2:"two", 3:"three", 4:"four", 5:"five",
-    6:"six", 7:"seven", 8:"eight", 9:"nine"
-}
-itt = {
-    1:"teen", 2:"twenty", 3:"thirty", 4:"fourty", 5:"fifty",
-    6:"sixty", 7:"seventy", 8:"eighty", 9:"ninety"
-}
-teens = {
-    1:"eleven", 2:"twelve", 3:"thirteen", 4:"fourteen", 5:"fifteen",
-    6:"sixteen", 7:"seventeen", 8:"eighteen", 9:"nineteen"
-}
+its = { 1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"seven", 8:"eight", 9:"nine" }
+itt = { 2:"twenty", 3:"thirty", 4:"fourty", 5:"fifty", 6:"sixty", 7:"seventy", 8:"eighty", 9:"ninety" }
+teens = { 1:"eleven", 2:"twelve", 3:"thirteen", 4:"fourteen", 5:"fifteen", 6:"sixteen", 7:"seventeen", 8:"eighteen", 9:"nineteen" }
+mil = { 0:"", 1:"thousand ", 2:"million ", 3:"billion ", 4:"trillion ", 5:"quadrillion ", 6:"quintillion ", 7:"sextillion ", 8:"heptillion ", 9:"octillion ", 10:"nonillion ", 11:"decillion ", 12:"undecillion ", 13:"duodecillion ", 14:"tredecillion ", 15:"quattuordecillion ", 16:"quindecillion ", 17:"sexdecillion ", 18:"septen-decillion ", 19:"octodecillion ", 20:"novemdecillion ", 21:"vigintillion " }
 
-def br(num):
-    decimals = 100.0
-    multiplied = num * decimals
-    floored = math.floor(multiplied)
-    remainder = multiplied - floored
-    if remainder >= .5:
-        floored += 1
-    rounded = str(floored / decimals)
-    while len(rounded) - rounded.index('.') <= 2:
-        rounded += '0'
-    return float(rounded)
-    
 def calc(num):
     while num > 0 and num < 1000:
-        # if num >= 10000:
-        #     print(its.get(int(num/10000)),end=" ")
-        #     num -= int(num/100) * 10000
-        # if num >= 1000:
-        #     print(its.get(int(num/1000)),end=" thousand ")
-        #     num -= int(num/1000) * 1000
         if num >= 100:
             print(its.get(int(num/100)),end=" hundered ")
             num -= int(num/100) * 100
@@ -48,34 +22,37 @@ def calc(num):
         elif num >= 1:
             print(its.get(int(num)),end=" ")
             num -= int(num)
-            
-
-
 
 def write(num):
-    dec = int(br(num % 1)*100)
-    num = math.floor(num)
+    if "." in num:
+        num, dec = (str(val) for val in num.split("."))
+        dec = int(dec[0:2])
+    else:
+        dec = 0
     secs = list()
-    num = list(str(num))
-    num.reverse()
+    num = list(num)
     if len(num) % 3 == 2:
-        num.append(0)
+        num.insert(0,"0")
     if len(num) % 3 == 1:
-        num.append(0)
-        num.append(0)
-    run = True
-    while run:
+        num.insert(0,"0")
+        num.insert(0,"0")
+    for i in range(int(len(num)/3)):
+        l = num[i*3:(i*3)+3]
         temp = ""
-        for i in range(3):
-            temp += str(num.pop(i))
+        for val in l:
+            temp += val
         secs.append(int(temp))
+    count = len(secs)-1
     for sec in secs:
-        calc(sec) 
+        calc(sec)
+        if sec != 0:
+            print(mil.get(count),end="")
+        count -= 1
     if dec != 0:
         print("and", dec, "/ 100", end = " ")
     
 user_in = None
 while user_in != 0:
-    user_in = float(input("Please enter a number between 0 and 1 million inclusive: "))
+    user_in = input("Please enter a number between 0 and 100 vigintillion inclusive: ")
     write(user_in)
-    print()
+    print("\n")
